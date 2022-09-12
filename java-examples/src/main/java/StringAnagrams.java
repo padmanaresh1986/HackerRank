@@ -1,45 +1,73 @@
+import java.util.Arrays;
+import java.util.Locale;
+
 public class StringAnagrams {
+
     /**
-     * two string are considered anagrams if they contain same characters with same number of frequency
-     * dcbac is anagram for bacdc
-     * bacdc is not anagram dcbad
+     * Two strings a and b called anagrams when they have same characters with same frequencies
+     * Anagrams of CAT are
+     * CAT, ACT,TAC, TCA,ATC, and CTA
      *
-     * given  two string a, b may and may not be same length , determine the minimum number of character deletion required
-     * to make a and b anagrams
-     *
-     * for example
-     * if a = cde and b = dcf  we can string e from string a and f from string b so that remaining string cd and dc are anagrams
+     * considering a and b are case insensitve anagrams , print Anagrams otherwise Not Anagrams
      */
 
     public static void main(String[] args) {
-        String a = "cde";
-        String b = "def";
-        int minDeletions = 0;
+        String a = "anagram";
+        String b = "aganmar";
 
-        int[] a_frequencies = new int[26];
-        int[] b_frequencies = new int[26];
+        //isAnagrams(a,b);
+        isAnagrams1(a,b);
+    }
+
+    private static void isAnagrams(String a, String b) {
+        if(a.length() != b.length()){
+            System.out.println("Not Anagram");
+            return;
+        }
+        a = a.toLowerCase();
+        b = b.toLowerCase();
+
+        char[] a_arr = a.toCharArray();
+        char[] b_arr = b.toCharArray();
+
+        Arrays.sort(a_arr);
+        Arrays.sort(b_arr);
+
+        if(Arrays.equals(a_arr,b_arr)){
+            System.out.println("Anagrams");
+        }else{
+            System.out.println("Not Anagrams");
+        }
+    }
+
+    // this is preferred solutions
+    private static void isAnagrams1(String a, String b) {
+        if(a.length() != b.length()){
+            System.out.println("Not Anagram");
+            return;
+        }
+        a = a.toLowerCase();
+        b = b.toLowerCase();
+
+        int[] char_array = new int[26];
 
         for (int i = 0; i < a.length(); i++) {
-            char current_char = a.charAt(i);
-            int char_to_int =  (int) current_char; // gives position from 97 for small alphabets
-            int position = char_to_int - (int)'a'; // this will fit values form 0 to 26
-            a_frequencies[position]++;
+            int index = a.charAt(i) - 'a';
+            char_array[index]++;
         }
 
-
         for (int i = 0; i < b.length(); i++) {
-            char current_char = b.charAt(i);
-            int char_to_int =  (int) current_char; // gives position from 97 for small alphabets
-            int position = char_to_int - (int)'a'; // this will fit values form 0 to 26
-            b_frequencies[position]++;
+            int index = b.charAt(i) - 'a';
+            char_array[index]--;
         }
 
         for (int i = 0; i < 26; i++) {
-            minDeletions += Math.abs(a_frequencies[i] - b_frequencies[i]);
+            if (char_array[i] != 0) {
+                System.out.println("Not Anagrams");
+                return;
+            }
         }
-        System.out.println(minDeletions);
 
+        System.out.println("Anagrams");
     }
-
-
 }
